@@ -7,3 +7,27 @@ services:
             - ./:/VideoSync/
         ports:
             - 8080:8080
+        
+        depends_on:
+            - broker
+
+    worker:
+        build: ./
+        command: "pipenv run celery -A VideoSync worker -l INFO"
+        volumes:
+            - ./:/VideoSync/
+        depends_on:
+            - broker
+
+    schedular:
+        build: ./
+        command: "pipenv run celery -A VideoSync beat -l INFO"
+        volumes:
+            - ./:/VideoSync/
+        depends_on:
+            - broker
+
+    broker:
+        image: redis
+        expose:
+            - 6379
