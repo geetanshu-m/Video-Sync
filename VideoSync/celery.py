@@ -10,8 +10,7 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 app.conf.beat_schedule = {  
     'add-every-10-seconds': {
-        'task': 'YoutubeApis.tasks.send_message',
-        'schedule': 15.0,
-        'args': (5,)
+        'task': 'YoutubeApis.tasks.fetch_youtube_data',
+        'schedule': 10,
     },
 }

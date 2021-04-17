@@ -7,9 +7,9 @@ class YoutubeVideos(models.Model):
 
     video_id = models.CharField(max_length=15, primary_key=True)
     title = models.TextField()
-    description = models.TextField()
+    description = models.TextField(blank=True)
     publish_time = models.DateTimeField()
-    thumbnails = models.JSONField()
+    thumbnails = models.JSONField(blank=True)
 
     @property
     def video_url(self):

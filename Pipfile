@@ -9,6 +9,8 @@ djangorestframework = "*"
 gunicorn = "*"
 celery = "*"
 redis = "*"
+requests = "*"
+django-environ = "*"
 
 [dev-packages]
 
