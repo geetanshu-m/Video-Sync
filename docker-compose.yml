@@ -2,7 +2,10 @@ version: '3'
 services:
     web:
         build: ./
-        command: "pipenv run gunicorn VideoSync.wsgi:application -w 1 --threads 12 --reload --bind 0.0.0.0:8080"
+        command: 
+            - /bin/sh
+            - '-c'
+            - /VideoSync/entrypoint.sh
         volumes:
             - ./:/VideoSync/
         ports:
