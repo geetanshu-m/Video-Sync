@@ -5,7 +5,7 @@ from .serializers import YoutubeVideosSerializer
 # Create your views here.
 
 class YoutubeVideosViewSet(viewsets.ModelViewSet):
-    queryset = YoutubeVideos.objects.all()
+    queryset = YoutubeVideos.objects.all().order_by('-publish_time')
     serializer_class = YoutubeVideosSerializer
 
     def create(self, request):
