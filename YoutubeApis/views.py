@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from .models import YoutubeVideos
 from rest_framework.response import Response
 from .serializers import YoutubeVideosSerializer
-from django.db.models import Q
+from django.contrib.postgres.search import SearchVector
 # Create your views here.
 
 class YoutubeVideosViewSet(viewsets.ModelViewSet):
@@ -12,9 +12,9 @@ class YoutubeVideosViewSet(viewsets.ModelViewSet):
     def list(self, request):
         if 'search' in request.query_params:
             query = request.query_params['search']
-            self.queryset = YoutubeVideos.objects.filter(
-                 Q(title__icontains=query) | Q(description__icontains=query)
-            )
+            self.queryset = YoutubeVideos.objects.annotate(
+                search=SearchVector('title', 'description'),
+            ).filter(search=query).order_by('-publish_time')
         return super().list(request)
 
     def create(self, request):
