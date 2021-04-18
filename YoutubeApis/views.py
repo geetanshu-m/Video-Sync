@@ -2,11 +2,20 @@ from rest_framework import viewsets
 from .models import YoutubeVideos
 from rest_framework.response import Response
 from .serializers import YoutubeVideosSerializer
+from django.db.models import Q
 # Create your views here.
 
 class YoutubeVideosViewSet(viewsets.ModelViewSet):
     queryset = YoutubeVideos.objects.all().order_by('-publish_time')
     serializer_class = YoutubeVideosSerializer
+
+    def list(self, request):
+        if 'search' in request.query_params:
+            query = request.query_params['search']
+            self.queryset = YoutubeVideos.objects.filter(
+                 Q(title__icontains=query) | Q(description__icontains=query)
+            )
+        return super().list(request)
 
     def create(self, request):
         data = request.data
