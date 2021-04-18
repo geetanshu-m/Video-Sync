@@ -11,6 +11,7 @@ celery = "*"
 redis = "*"
 requests = "*"
 django-environ = "*"
+psycopg2 = "*"
 
 [dev-packages]
 

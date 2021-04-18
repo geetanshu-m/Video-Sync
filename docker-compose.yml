@@ -13,6 +13,7 @@ services:
         
         depends_on:
             - broker
+            - db
 
     worker:
         build: ./
@@ -21,6 +22,7 @@ services:
             - ./:/VideoSync/
         depends_on:
             - broker
+            - db
 
     schedular:
         build: ./
@@ -29,8 +31,20 @@ services:
             - ./:/VideoSync/
         depends_on:
             - broker
+            - db
 
     broker:
         image: redis
         expose:
             - 6379
+
+    db:
+        image: postgres
+        environment:
+            - "POSTGRES_DB=${DATABASE}"
+            - "POSTGRES_USER=${USER}"
+            - "POSTGRES_PASSWORD=${PASSWORD}"
+        volumes:
+            - ./postgres_data:/var/lib/postgresql/data
+        expose:
+            - 5432
