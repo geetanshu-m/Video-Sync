@@ -9,12 +9,14 @@ API to fetch latest videos sorted in reverse chronological order of their publis
 - Clery + Celery Beat
 - Redis
 - Docker / Docker Compose
+- Postgres
 
 ### Things achived in the project
 
 - Included Async worker which runs tasks periodically.
 - Exposed GET API to get the results present in the DB.
 - Over this get API with search query param, service can search on the tile and description
+- There is advanced full text search implemented using SearchVector.
 - Project Dockerized
 
 ### How to run this application
@@ -25,6 +27,12 @@ API to fetch latest videos sorted in reverse chronological order of their publis
 ```
 QUERY=YOUR_QUERY
 YOUTUBE_API_KEY=API_KEY
+
+DATABASE=
+USER=
+PASSWORD=
+HOST=db
+PORT=5432
 ```
 - run ```docker-compose build```
 - run ```docker-comopose up```
