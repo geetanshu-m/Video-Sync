@@ -8,6 +8,7 @@ API to fetch latest videos sorted in reverse chronological order of their publis
 - Django / Django Rest Framework
 - Clery + Celery Beat
 - Redis
+- Docker / Docker Compose
 
 ### Things achived in the project
 
