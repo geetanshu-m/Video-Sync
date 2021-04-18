@@ -34,7 +34,6 @@ class YoutubeDataFetch():
             'publishedAfter': self.publisedAfter
         }
         self.data = requests.get(self.url,params=params).json()
-        print(self.data)
         
     def clean_data(self):
         self.cleaned_data = []
@@ -49,6 +48,13 @@ class YoutubeDataFetch():
             self.cleaned_data.append(o)
     
     def save_to_db(self):
+        # Filtering the Videos that are not present in the db
+        video_ids = list(map(lambda x: x['video_id'], self.cleaned_data))
+        ids_present = YoutubeVideos.objects.all().filter(pk__in=video_ids).values('video_id')
+        ids_present = list(map(lambda x: x['video_id'], ids_present))
+        self.cleaned_data = list(filter(lambda x : x['video_id'] not in ids_present, self.cleaned_data))
+        print(f"Out of {len(video_ids)}, {len(ids_present)} was already there, inserting remaining {len(self.cleaned_data)}")
+        
         serialized_data = YoutubeVideosSerializer(data=self.cleaned_data, many=True)
         if serialized_data.is_valid(raise_exception=True):
             serialized_data.save()
