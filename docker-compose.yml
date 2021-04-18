@@ -3,7 +3,7 @@ services:
     web:
         build: ./
         command: 
-            - /bin/sh
+            - /bin/sh 
             - '-c'
             - /VideoSync/entrypoint.sh
         volumes:
@@ -12,8 +12,8 @@ services:
             - 8080:8080
         
         depends_on:
-            - broker
-            - db
+            db:
+                condition: service_healthy
 
     worker:
         build: ./
@@ -21,8 +21,8 @@ services:
         volumes:
             - ./:/VideoSync/
         depends_on:
-            - broker
-            - db
+            db:
+                condition: service_healthy
 
     schedular:
         build: ./
@@ -30,8 +30,8 @@ services:
         volumes:
             - ./:/VideoSync/
         depends_on:
-            - broker
-            - db
+            db:
+                condition: service_healthy
 
     broker:
         image: redis
@@ -46,5 +46,10 @@ services:
             - "POSTGRES_PASSWORD=${PASSWORD}"
         volumes:
             - ./postgres_data:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U ${USER} -d ${DATABASE}"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
         expose:
             - 5432
